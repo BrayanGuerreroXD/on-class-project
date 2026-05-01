@@ -34,7 +34,32 @@ Credenciales:
 
 ### MongoDB (report-ms)
 
-report-ms tiene su propio docker compose para levantar su base de datos MongoDB. Consulta su documentacion.
+report-ms utiliza MongoDB como base de datos para el almacenamiento de reportes.
+
+#### Levantar MongoDB
+
+```bash
+# Levantar MongoDB
+docker-compose up -d
+
+# Ver logs
+docker-compose logs -f mongodb
+
+# Conectarte con mongosh
+docker exec -it mongodb-reactive mongosh -u admin -p secret123 --authenticationDatabase admin
+
+# Detener
+docker-compose down
+
+# Detener y eliminar datos
+docker-compose down -v
+```
+
+#### Credenciales
+
+- **Usuario:** admin
+- **Password:** secret123
+- **Puerto:** 27017
 
 ### Migraciones de Base de Datos
 
@@ -45,23 +70,23 @@ Cada API tiene su carpeta `db.migration` en la capa `application` donde se deben
 Para levantar el servicio de Kafka y su interfaz de usuario:
 
 ```bash
-docker compose -f docker-compose.yml up -d
+docker compose -f kafka-docker-compose.yml up -d
 ```
 
 Para detener los servicios:
 
 ```bash
-docker compose -f docker-compose.yml down
+docker compose -f kafka-docker-compose.yml down
 ```
 
 Para ver los logs de Kafka en tiempo real:
 
 ```bash
-docker compose -f docker-compose.yml logs -f kafka
+docker compose -f kafka-docker-compose.yml logs -f kafka
 ```
 
 Para ver los logs de la interfaz de Kafka UI:
 
 ```bash
-docker compose -f docker-compose.yml logs -f kafka-ui
+docker compose -f kafka-docker-compose.yml logs -f kafka-ui
 ```
