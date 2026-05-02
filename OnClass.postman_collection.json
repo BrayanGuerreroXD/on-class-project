@@ -1,0 +1,3396 @@
+{
+  "info": {
+    "_postman_id": "8ed09cc4-ab6c-4332-8b3a-9f8a5bc36f05",
+    "name": "OnClass",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "32530495",
+    "_collection_link": "https://go.postman.co/collection/32530495-8ed09cc4-ab6c-4332-8b3a-9f8a5bc36f05?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "api-people",
+      "item": [
+        {
+          "name": "auth",
+          "item": [
+            {
+              "name": "login",
+              "item": [
+                {
+                  "name": "Authenticate user and obtain JWT token",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "// 1. Analizar el cuerpo de la respuesta como un objeto JSON",
+                          "try {",
+                          "    var responseData = pm.response.json();",
+                          "} catch (e) {",
+                          "    console.error(\"No se pudo analizar la respuesta JSON. Asegúrate de que el body es JSON.\");",
+                          "    return;",
+                          "}",
+                          "",
+                          "// 2. Acceder al valor del token dentro del objeto 'data'",
+                          "// La estructura es: responseData -> data -> token",
+                          "var tokenValue = responseData.data.token; ",
+                          "",
+                          "// 3. Guardar el valor en la variable de colección 'bearerToken'",
+                          "var variableName = \"bearerToken\";",
+                          "",
+                          "if (tokenValue) {",
+                          "    // Guarda el valor en una variable de colección",
+                          "    pm.collectionVariables.set(variableName, tokenValue);",
+                          "    ",
+                          "    // Opcional: muestra un mensaje en la Consola de Postman para confirmar",
+                          "    console.log(`✅ Token guardado en la variable de colección '${variableName}'.`);",
+                          "    console.log(`Valor del token: ${tokenValue}`);",
+                          "} else {",
+                          "    // Opcional: mensaje de error si no se encuentra el token",
+                          "    console.log(\"❌ Error: El campo 'data.token' no se encontró en la respuesta.\");",
+                          "    pm.collectionVariables.unset(variableName); // Limpia la variable si no hay token",
+                          "}"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"admin@pragma.com\",\n  \"password\": \"Admin123456\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrlPeople}}/api/auth/login",
+                      "host": [
+                        "{{baseUrlPeople}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "login"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Authentication successful",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"string\",\n  \"password\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"token\": \"string\"\n}"
+                    },
+                    {
+                      "name": "Invalid credentials",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"email\": \"string\",\n  \"password\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/login",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "login"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "logout",
+              "item": [
+                {
+                  "name": "Logout and invalidate JWT token",
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/auth/logout",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "auth",
+                        "logout"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Logout successful",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/logout",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "logout"
+                          ]
+                        }
+                      },
+                      "status": "No Content",
+                      "code": 204,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": ""
+                    },
+                    {
+                      "name": "Missing or invalid token",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/auth/logout",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "auth",
+                            "logout"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "persons",
+          "item": [
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get person by ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlPeople}}/api/persons/:id",
+                      "host": [
+                        "{{baseUrlPeople}}"
+                      ],
+                      "path": [
+                        "api",
+                        "persons",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "4"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Person found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/persons/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "persons",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3941"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 1694,\n  \"email\": \"string\",\n  \"name\": \"string\",\n  \"age\": 6519,\n  \"createdAt\": \"1971-10-02T07:38:48.236Z\",\n  \"updatedAt\": \"2021-11-14T03:36:29.314Z\"\n}"
+                    },
+                    {
+                      "name": "Person not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/persons/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "persons",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3941"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                },
+                {
+                  "name": "Update an existing person",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"string\",\n  \"age\": 3229\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrlPeople}}/api/persons/:id",
+                      "host": [
+                        "{{baseUrlPeople}}"
+                      ],
+                      "path": [
+                        "api",
+                        "persons",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "3941"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Person updated successfully",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"string\",\n  \"age\": 3229\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/persons/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "persons",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3941"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 1694,\n  \"email\": \"string\",\n  \"name\": \"string\",\n  \"age\": 6519,\n  \"createdAt\": \"1971-10-02T07:38:48.236Z\",\n  \"updatedAt\": \"2021-11-14T03:36:29.314Z\"\n}"
+                    },
+                    {
+                      "name": "Person not found",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"string\",\n  \"age\": 3229\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/persons/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "persons",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3941"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Get all persons",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrlPeople}}/api/persons",
+                  "host": [
+                    "{{baseUrlPeople}}"
+                  ],
+                  "path": [
+                    "api",
+                    "persons"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "List of persons",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/persons",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "persons"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"id\": 1694,\n  \"email\": \"string\",\n  \"name\": \"string\",\n  \"age\": 6519,\n  \"createdAt\": \"1971-10-02T07:38:48.236Z\",\n  \"updatedAt\": \"2021-11-14T03:36:29.314Z\"\n}"
+                }
+              ]
+            },
+            {
+              "name": "Create a new person",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"mail@mail.com\",\n  \"password\": \"1234\",\n  \"name\": \"Besgo\",\n  \"age\": 19\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrlPeople}}/api/persons",
+                  "host": [
+                    "{{baseUrlPeople}}"
+                  ],
+                  "path": [
+                    "api",
+                    "persons"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Person created successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"string\",\n  \"password\": \"string\",\n  \"name\": \"string\",\n  \"age\": 1935\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/persons",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "persons"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"id\": 1694,\n  \"email\": \"string\",\n  \"name\": \"string\",\n  \"age\": 6519,\n  \"createdAt\": \"1971-10-02T07:38:48.236Z\",\n  \"updatedAt\": \"2021-11-14T03:36:29.314Z\"\n}"
+                },
+                {
+                  "name": "Email already registered",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"string\",\n  \"password\": \"string\",\n  \"name\": \"string\",\n  \"age\": 1935\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/persons",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "persons"
+                      ]
+                    }
+                  },
+                  "status": "Conflict",
+                  "code": 409,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": ""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api-report",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "bootcamps",
+              "item": [
+                {
+                  "name": "max-technology-count",
+                  "item": [
+                    {
+                      "name": "Get bootcamp with maximum number of technologies",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrlReport}}/api/v1/bootcamps/max-technology-count",
+                          "host": [
+                            "{{baseUrlReport}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "bootcamps",
+                            "max-technology-count"
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Bootcamp found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bootcamps/max-technology-count",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bootcamps",
+                                "max-technology-count"
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": \"string\",\n  \"externalId\": 1363,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"initTime\": \"2019-03-16T11:47:10.489Z\",\n  \"duration\": 4171,\n  \"capacityCount\": 5457,\n  \"personCount\": 5130,\n  \"technologyCount\": 9652,\n  \"capacities\": [\n    {\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"name\": \"string\"\n        },\n        {\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"name\": \"string\"\n        },\n        {\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"people\": [\n    {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    }\n  ]\n}"
+                        },
+                        {
+                          "name": "Bootcamp not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/bootcamps/max-technology-count",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "bootcamps",
+                                "max-technology-count"
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api-technology",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "technologies",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "Get technology by ID",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrlTechnology}}/api/v1/technologies/:id",
+                          "host": [
+                            "{{baseUrlTechnology}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technologies",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Technology found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/technologies/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "technologies",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2055"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6871,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"2016-11-12T19:46:15.039Z\",\n  \"updatedAt\": \"1998-07-01T18:07:43.864Z\"\n}"
+                        },
+                        {
+                          "name": "Technology not found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/technologies/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "technologies",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2055"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Update an existing technology",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"description\": \"Tech 1\",\n  \"name\": \"Tech 1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrlTechnology}}/api/v1/technologies/:id",
+                          "host": [
+                            "{{baseUrlTechnology}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technologies",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Technology updated successfully",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"description\": \"string\",\n  \"name\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/technologies/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "technologies",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2055"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"id\": 6871,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"2016-11-12T19:46:15.039Z\",\n  \"updatedAt\": \"1998-07-01T18:07:43.864Z\"\n}"
+                        },
+                        {
+                          "name": "Technology not found",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"description\": \"string\",\n  \"name\": \"string\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/technologies/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "technologies",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2055"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Delete a technology",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrlTechnology}}/api/v1/technologies/:id",
+                          "host": [
+                            "{{baseUrlTechnology}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technologies",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "2055"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Technology deleted successfully",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/technologies/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "technologies",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2055"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": ""
+                        },
+                        {
+                          "name": "Technology not found",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "*/*"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/technologies/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "technologies",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2055"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "*/*"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": ""
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Get all technologies",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlTechnology}}/api/v1/technologies",
+                      "host": [
+                        "{{baseUrlTechnology}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "technologies"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "List of technologies",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/technologies",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technologies"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 6871,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"2016-11-12T19:46:15.039Z\",\n  \"updatedAt\": \"1998-07-01T18:07:43.864Z\"\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create a new technology",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"description\": \"Tech 1\",\n  \"name\": \"Tech 1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrlTechnology}}/api/v1/technologies",
+                      "host": [
+                        "{{baseUrlTechnology}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "technologies"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Technology created successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"description\": \"string\",\n  \"name\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/technologies",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technologies"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 6871,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"createdAt\": \"2016-11-12T19:46:15.039Z\",\n  \"updatedAt\": \"1998-07-01T18:07:43.864Z\"\n}"
+                    },
+                    {
+                      "name": "Invalid request data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"description\": \"string\",\n  \"name\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/technologies",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technologies"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api-capacity",
+      "item": [
+        {
+          "name": "v1",
+          "item": [
+            {
+              "name": "capacities",
+              "item": [
+                {
+                  "name": "{id}",
+                  "item": [
+                    {
+                      "name": "Get capacity by ID",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrlCapacity}}/api/v1/capacities/:id",
+                          "host": [
+                            "{{baseUrlCapacity}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "capacities",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "2494"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Capacity found",
+                          "originalRequest": {
+                            "method": "GET",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/capacities/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "capacities",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2494"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"data\": \"\"\n}"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Update an existing capacity",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"description\": \"str\",\n  \"name\": \"string\",\n  \"technologies\": [\n    {\n      \"technologyId\": 5733\n    },\n    {\n      \"technologyId\": 8255\n    },\n    {\n      \"technologyId\": 9214\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrlCapacity}}/api/v1/capacities/:id",
+                          "host": [
+                            "{{baseUrlCapacity}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "capacities",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "2494"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Capacity updated successfully",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"description\": \"str\",\n  \"name\": \"string\",\n  \"technologies\": [\n    {\n      \"technologyId\": 5733\n    },\n    {\n      \"technologyId\": 8255\n    },\n    {\n      \"technologyId\": 9214\n    }\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/capacities/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "capacities",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2494"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"data\": \"\"\n}"
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Delete a capacity",
+                      "request": {
+                        "auth": {
+                          "type": "bearer",
+                          "bearer": [
+                            {
+                              "key": "token",
+                              "value": "{{bearerToken}}",
+                              "type": "string"
+                            }
+                          ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrlCapacity}}/api/v1/capacities/:id",
+                          "host": [
+                            "{{baseUrlCapacity}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "capacities",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "2494"
+                            }
+                          ]
+                        }
+                      },
+                      "response": [
+                        {
+                          "name": "Capacity deleted successfully",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/v1/capacities/:id",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "v1",
+                                "capacities",
+                                ":id"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "id",
+                                  "value": "2494"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "body": "{\n  \"data\": \"\"\n}"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Get all capacities",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlCapacity}}/api/v1/capacities",
+                      "host": [
+                        "{{baseUrlCapacity}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "capacities"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "List of capacities",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/capacities",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "capacities"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"data\": \"\"\n}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Create a new capacity",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"description\": \"Cap 1\",\n  \"name\": \"Cap 1\",\n  \"technologies\": [\n    {\n      \"technologyId\": 1\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrlCapacity}}/api/v1/capacities",
+                      "host": [
+                        "{{baseUrlCapacity}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "capacities"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Capacity created successfully",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"description\": \"str\",\n  \"name\": \"string\",\n  \"technologies\": [\n    {\n      \"technologyId\": 5733\n    },\n    {\n      \"technologyId\": 8255\n    },\n    {\n      \"technologyId\": 9214\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/capacities",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "capacities"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"data\": \"\"\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "technology-catalogs",
+              "item": [
+                {
+                  "name": "Get all technology catalogs",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlCapacity}}/api/v1/technology-catalogs",
+                      "host": [
+                        "{{baseUrlCapacity}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "technology-catalogs"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "List of technology catalogs",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/v1/technology-catalogs",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "v1",
+                            "technology-catalogs"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"data\": \"\"\n}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "api-bootcamp",
+      "item": [
+        {
+          "name": "bootcamps",
+          "item": [
+            {
+              "name": "people",
+              "item": [
+                {
+                  "name": "Get bootcamp participants by email",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlBootcamp}}/api/bootcamps/people?email=string&page=0&size=10",
+                      "host": [
+                        "{{baseUrlBootcamp}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps",
+                        "people"
+                      ],
+                      "query": [
+                        {
+                          "key": "email",
+                          "value": "string"
+                        },
+                        {
+                          "key": "page",
+                          "value": "0"
+                        },
+                        {
+                          "key": "size",
+                          "value": "10"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "List of bootcamp participants",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/people?email=string&page=0&size=10",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            "people"
+                          ],
+                          "query": [
+                            {
+                              "key": "email",
+                              "value": "string"
+                            },
+                            {
+                              "key": "page",
+                              "value": "0"
+                            },
+                            {
+                              "key": "size",
+                              "value": "10"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 2904,\n  \"email\": \"string\",\n  \"bootcamp\": {\n    \"id\": 3958,\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"initTime\": \"2010-07-22T16:30:03.106Z\",\n    \"duration\": 3979,\n    \"capacityCount\": 508,\n    \"capacities\": [\n      {\n        \"id\": 8217,\n        \"name\": \"string\",\n        \"technologies\": [\n          {\n            \"id\": 9609,\n            \"name\": \"string\"\n          },\n          {\n            \"id\": 4596,\n            \"name\": \"string\"\n          }\n        ]\n      },\n      {\n        \"id\": 8303,\n        \"name\": \"string\",\n        \"technologies\": [\n          {\n            \"id\": 9619,\n            \"name\": \"string\"\n          },\n          {\n            \"id\": 3642,\n            \"name\": \"string\"\n          }\n        ]\n      }\n    ]\n  }\n}"
+                    },
+                    {
+                      "name": "No participants found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/people?email=string&page=0&size=10",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            "people"
+                          ],
+                          "query": [
+                            {
+                              "key": "email",
+                              "value": "string"
+                            },
+                            {
+                              "key": "page",
+                              "value": "0"
+                            },
+                            {
+                              "key": "size",
+                              "value": "10"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "signup",
+              "item": [
+                {
+                  "name": "Sign up for a bootcamp",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"bootcampId\": 3783\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrlBootcamp}}/api/bootcamps/signup",
+                      "host": [
+                        "{{baseUrlBootcamp}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps",
+                        "signup"
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Sign up successful",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"bootcampId\": 3783\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/signup",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            "signup"
+                          ]
+                        }
+                      },
+                      "status": "Created",
+                      "code": 201,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 3098,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"initTime\": \"1966-10-18T11:44:45.459Z\",\n  \"duration\": 8272,\n  \"capacityCount\": 4059,\n  \"capacities\": [\n    {\n      \"id\": 349,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 4134,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9440,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"id\": 7996,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 5947,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 8968,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}"
+                    },
+                    {
+                      "name": "Invalid request data",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"bootcampId\": 3783\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/signup",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            "signup"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    },
+                    {
+                      "name": "Bootcamp not found",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"bootcampId\": 3783\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/signup",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            "signup"
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    },
+                    {
+                      "name": "Already registered in this bootcamp",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"bootcampId\": 3783\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/signup",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            "signup"
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "Get bootcamp by ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlBootcamp}}/api/bootcamps/:id",
+                      "host": [
+                        "{{baseUrlBootcamp}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "3847"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Bootcamp found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 3098,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"initTime\": \"1966-10-18T11:44:45.459Z\",\n  \"duration\": 8272,\n  \"capacityCount\": 4059,\n  \"capacities\": [\n    {\n      \"id\": 349,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 4134,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9440,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"id\": 7996,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 5947,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 8968,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}"
+                    },
+                    {
+                      "name": "Bootcamp not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Update an existing bootcamp",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrlBootcamp}}/api/bootcamps/:id",
+                      "host": [
+                        "{{baseUrlBootcamp}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "3847"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Bootcamp updated successfully",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"id\": 3098,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"initTime\": \"1966-10-18T11:44:45.459Z\",\n  \"duration\": 8272,\n  \"capacityCount\": 4059,\n  \"capacities\": [\n    {\n      \"id\": 349,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 4134,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9440,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"id\": 7996,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 5947,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 8968,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}"
+                    },
+                    {
+                      "name": "Invalid request data",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    },
+                    {
+                      "name": "Bootcamp not found",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    }
+                  ]
+                },
+                {
+                  "name": "Delete a bootcamp by ID",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "*/*"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrlBootcamp}}/api/bootcamps/:id",
+                      "host": [
+                        "{{baseUrlBootcamp}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id",
+                          "value": "3847"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "name": "Bootcamp deleted successfully",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "No Content",
+                      "code": 204,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    },
+                    {
+                      "name": "Bootcamp not found",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "*/*"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/bootcamps/:id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "bootcamps",
+                            ":id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "id",
+                              "value": "3847"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "*/*"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Get all bootcamps with pagination and sorting",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrlBootcamp}}/api/bootcamps?page=0&size=10&sortBy=name&direction=ASC",
+                  "host": [
+                    "{{baseUrlBootcamp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bootcamps"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "size",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "name"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "ASC"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "List of bootcamps",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bootcamps?page=0&size=10&sortBy=name&direction=ASC",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps"
+                      ],
+                      "query": [
+                        {
+                          "key": "page",
+                          "value": "0"
+                        },
+                        {
+                          "key": "size",
+                          "value": "10"
+                        },
+                        {
+                          "key": "sortBy",
+                          "value": "name"
+                        },
+                        {
+                          "key": "direction",
+                          "value": "ASC"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"id\": 3098,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"initTime\": \"1966-10-18T11:44:45.459Z\",\n  \"duration\": 8272,\n  \"capacityCount\": 4059,\n  \"capacities\": [\n    {\n      \"id\": 349,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 4134,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9440,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"id\": 7996,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 5947,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 8968,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}"
+                }
+              ]
+            },
+            {
+              "name": "Create a new bootcamp",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrlBootcamp}}/api/bootcamps",
+                  "host": [
+                    "{{baseUrlBootcamp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bootcamps"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "Bootcamp created successfully",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bootcamps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"id\": 3098,\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"initTime\": \"1966-10-18T11:44:45.459Z\",\n  \"duration\": 8272,\n  \"capacityCount\": 4059,\n  \"capacities\": [\n    {\n      \"id\": 349,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 4134,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 9440,\n          \"name\": \"string\"\n        }\n      ]\n    },\n    {\n      \"id\": 7996,\n      \"name\": \"string\",\n      \"technologies\": [\n        {\n          \"id\": 5947,\n          \"name\": \"string\"\n        },\n        {\n          \"id\": 8968,\n          \"name\": \"string\"\n        }\n      ]\n    }\n  ]\n}"
+                },
+                {
+                  "name": "Invalid request data",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bootcamps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{}"
+                },
+                {
+                  "name": "Capacity not found",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"capacities\": [\n    3035\n  ],\n  \"duration\": 6094,\n  \"initTime\": \"1949-12-10T22:40:34.487Z\",\n  \"name\": \"string\",\n  \"description\": \"string\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/bootcamps",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "bootcamps"
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{}"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "capacities",
+          "item": [
+            {
+              "name": "Get all capacity catalogs",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrlBootcamp}}/api/capacities",
+                  "host": [
+                    "{{baseUrlBootcamp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "capacities"
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "name": "List of capacities",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/capacities",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "capacities"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "{\n  \"id\": 9059,\n  \"name\": \"string\",\n  \"technologies\": [\n    {\n      \"id\": 2851,\n      \"name\": \"string\"\n    },\n    {\n      \"id\": 5797,\n      \"name\": \"string\"\n    }\n  ]\n}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrlPeople",
+      "value": ""
+    },
+    {
+      "key": "baseUrlTechnology",
+      "value": ""
+    },
+    {
+      "key": "baseUrlCapacity",
+      "value": ""
+    },
+    {
+      "key": "baseUrlBootcamp",
+      "value": ""
+    },
+    {
+      "key": "baseUrlReport",
+      "value": ""
+    },
+    {
+      "key": "bearerToken",
+      "value": ""
+    }
+  ]
+}
