@@ -2,6 +2,12 @@
 
 Proyecto enfocado en bootcamps para el desarrollo de microservicios.
 
+## Arquitectura
+
+La siguiente imagen representa la arquitectura general del proyecto:
+
+![Arquitectura del Proyecto](Arquitectura-arquitectura.drawio.png)
+
 ## Microservicios
 
 - [people-ms](https://github.com/BrayanGuerreroXD/people-ms/tree/dev)
