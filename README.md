@@ -96,3 +96,11 @@ Para ver los logs de la interfaz de Kafka UI:
 ```bash
 docker compose -f kafka-docker-compose.yml logs -f kafka-ui
 ```
+
+## Colección de Postman
+
+Este proyecto incluye una colección ordenada de Postman para probar todos los endpoints de los microservicios:
+
+- [OnClass.postman_collection.json](./OnClass.postman_collection.json)
+
+La colección está organizada por microservicios (api-people, api-report, api-technology) y incluye autenticación JWT.
